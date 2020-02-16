@@ -1,30 +1,31 @@
 {
-  "name": "javascript-action",
+  "name": "sync-branches",
   "version": "1.0.0",
-  "description": "JavaScript Action Template",
+  "description": "GitHub Action to sync another branch when one is updated",
   "main": "index.js",
-  "scripts": {
-    "lint": "eslint index.js",
-    "package": "ncc build index.js -o dist",
-    "test": "eslint index.js && jest"
+  "author": "Tre Ammatuna <tre@tretuna.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tretuna/sync-branches/issues"
   },
+  "homepage": "https://github.com/tretuna/sync-branches#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/javascript-action.git"
+    "url": "git@github.com:TreTuna/sync-branches.git"
   },
   "keywords": [
     "GitHub",
     "Actions",
     "JavaScript"
   ],
-  "author": "GitHub",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/actions/javascript-action/issues"
+  "scripts": {
+    "lint": "eslint index.js",
+    "package": "ncc build index.js -o dist",
+    "test": "eslint index.js && jest"
   },
-  "homepage": "https://github.com/actions/javascript-action#readme",
   "dependencies": {
-    "@actions/core": "^1.1.1"
+    "@actions/core": "^1.1.1",
+    "@actions/github": "^2.1.0"
   },
   "devDependencies": {
     "@zeit/ncc": "^0.20.5",

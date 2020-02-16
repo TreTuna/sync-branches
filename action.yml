@@ -1,13 +1,21 @@
-name: 'Wait'
-description: 'Wait a designated number of milliseconds'
+name: "Sync branches"
+description: "GitHub Action to, upon successful merge, open a pull request to sync the updated branch back to one or more other branches."
 inputs:
-  milliseconds:  # id of input
-    description: 'number of milliseconds to wait'
+  githubToken: # id of input
+    description: "User token to be associated with this pull request."
+    required: false
+    default: "1000"
+  fromBranch:
+    description: "Branch from make pull-request from"
     required: true
-    default: '1000'
+    default: "master"
+  toBranch:
+    description: "Branch to make the pull-request against"
+    required: true
+    default: "{'branches': ['develop']}"
 outputs:
-  time: # output will be available to future steps 
-    description: 'The message to output'
+  time: # output will be available to future steps
+    description: "The message to output"
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: "node12"
+  main: "dist/index.js"
