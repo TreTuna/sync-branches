@@ -19,11 +19,28 @@ GitHub Action to sync one branch when another is updated.
 ## Example usage
 
 ```YML
-- name: Opening pull request
-  id: pull
-  uses: tretuna/sync-branches@v1
-  with:
-    GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-    FROM_BRANCH: "master"
-    TO_BRANCH: "develop"
+name: Sync
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  sync-branches:
+    runs-on: ubuntu-latest
+    name: Syncing branches
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Opening pull request
+        id: pull
+        uses: tretuna/sync-branches@v1-beta.1
+        with:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          FROM_BRANCH: "master"
+          TO_BRANCH: "develop"
 ```
