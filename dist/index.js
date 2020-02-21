@@ -1981,17 +1981,15 @@ module.exports = require("os");
 const core = __webpack_require__(470);
 const github = __webpack_require__(469);
 
-// most @actions toolkit packages have async methods
 async function run() {
   const fromBranch = core.getInput("FROM_BRANCH", { required: true });
   const toBranch = core.getInput("TO_BRANCH", { required: true });
   const githubToken = core.getInput("GITHUB_TOKEN", { required: true });
 
   try {
-    console.log(`Making a PR to ${toBranch} from ${fromBranch}`);
+    console.log(`Making a pull request to ${toBranch} from ${fromBranch}.`);
 
     const actionContext = github.context;
-    console.log("💣🔥>>>>>>>: run -> actionContext", actionContext);
 
     const octokit = new github.GitHub(githubToken);
 
@@ -2003,7 +2001,9 @@ async function run() {
       base: toBranch
     });
 
-    console.log("💣🔥>>>>>>>: run -> pullRequest", pullRequest);
+    console.log(
+      `Pull request successful! You can see it here: ${pullRequest.url}.`
+    );
   } catch (error) {
     core.setFailed(error.message);
   }
