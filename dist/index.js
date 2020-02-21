@@ -1987,7 +1987,7 @@ async function run() {
   const githubToken = core.getInput("GITHUB_TOKEN", { required: true });
 
   try {
-    core.debug(`Making a pull request to ${toBranch} from ${fromBranch}.`);
+    console.log(`Making a pull request to ${toBranch} from ${fromBranch}.`);
 
     const {
       payload: { repository }
@@ -2003,8 +2003,10 @@ async function run() {
     const currentPull = currentPulls.find(pull => {
       return pull.head === fromBranch && pull.base === toBranch;
     });
+    console.log("????>>>>>>>: run -> currentPull", currentPull);
 
     if (!currentPull) {
+      console.log("???????????? inside conditional ????????????");
       const { data: pullRequest } = await octokit.pulls.create({
         owner: repository.owner.login,
         repo: repository.name,
@@ -2013,11 +2015,11 @@ async function run() {
         base: toBranch
       });
 
-      core.debug(
+      console.log(
         `Pull request successful! You can view it here: ${pullRequest.url}.`
       );
     } else {
-      core.debug(
+      console.log(
         `There is already a pull request to ${toBranch} from ${fromBranch}.`,
         `You can view it here: ${currentPull.url}`
       );
