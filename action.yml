@@ -1,21 +1,18 @@
 name: "Sync branches"
 description: "GitHub Action to, upon successful merge, open a pull request to sync the updated branch back to one or more other branches."
 inputs:
-  githubToken: # id of input
+  GITHUB_TOKEN:
     description: "User token to be associated with this pull request."
     required: false
     default: "1000"
-  fromBranch:
+  FROM_BRANCH:
     description: "Branch from make pull-request from"
     required: true
     default: "master"
-  toBranch:
+  TO_BRANCH:
     description: "Branch to make the pull-request against"
     required: true
     default: "{'branches': ['develop']}"
-outputs:
-  time: # output will be available to future steps
-    description: "The message to output"
 runs:
   using: "node12"
   main: "dist/index.js"
