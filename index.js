@@ -21,11 +21,13 @@ async function run() {
     });
 
     const currentPull = currentPulls.find(pull => {
+      console.log(pull.head);
+      console.log(pull.base);
       return pull.head === fromBranch && pull.base === toBranch;
     });
     console.log("????>>>>>>>: run -> currentPull", currentPull);
 
-    if (currentPull) {
+    if (!currentPull) {
       console.log("???????????? inside conditional ????????????", currentPull);
       console.log("???????????? inside conditional ????????????", !currentPull);
       const { data: pullRequest } = await octokit.pulls.create({
