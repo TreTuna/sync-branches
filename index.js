@@ -37,7 +37,7 @@ async function run() {
           : `sync: ${fromBranch} to ${toBranch}`,
         body: pullRequestBody
           ? pullRequestBody
-          : `New code has just landed in ${fromBranch}, so let's bring ${toBranch} up to speed!`
+          : `sync-branches: New code has just landed in ${fromBranch}, so let's bring ${toBranch} up to speed!`
       });
 
       console.log(
