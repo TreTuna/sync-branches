@@ -7,7 +7,7 @@ async function run() {
   const toBranch = core.getInput("toBranch");
   try {
     console.log(`Making a PR to ${toBranch} from ${fromBranch}`);
-    const payload = JSON.stringify(github.context.payload, undefined, 2);
+    const payload = JSON.stringify(github.context, undefined, 2);
     console.log(`The event payload: ${payload}`);
   } catch (error) {
     core.setFailed(error.message);
