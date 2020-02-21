@@ -24,7 +24,7 @@ async function run() {
       return pull.head === fromBranch && pull.base === toBranch;
     });
 
-    if (!currentPull.url) {
+    if (!currentPull) {
       const { data: pullRequest } = await octokit.pulls.create({
         owner: repository.owner.login,
         repo: repository.name,
