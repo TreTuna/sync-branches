@@ -7,7 +7,7 @@ async function run() {
   const githubToken = core.getInput("GITHUB_TOKEN", { required: true });
 
   try {
-    console.log(`Making a pull request to ${toBranch} from ${fromBranch}.`);
+    core.debug(`Making a pull request to ${toBranch} from ${fromBranch}.`);
 
     const {
       payload: { repository }
@@ -20,19 +20,28 @@ async function run() {
       repo: repository.name
     });
 
-    console.log("💣🔥>>>>>>>: run -> currentPulls", currentPulls);
-
-    const { data: pullRequest } = await octokit.pulls.create({
-      owner: repository.owner.login,
-      repo: repository.name,
-      title: `sync: ${fromBranch} to ${toBranch}`,
-      head: fromBranch,
-      base: toBranch
+    const currentPull = currentPulls.find(pull => {
+      return pull.head === fromBranch && pull.base === toBranch;
     });
 
-    console.log(
-      `Pull request successful! You can see it here: ${pullRequest.url}.`
-    );
+    if (!currentPull.url) {
+      const { data: pullRequest } = await octokit.pulls.create({
+        owner: repository.owner.login,
+        repo: repository.name,
+        title: `sync: ${fromBranch} to ${toBranch}`,
+        head: fromBranch,
+        base: toBranch
+      });
+
+      core.debug(
+        `Pull request successful! You can view it here: ${pullRequest.url}.`
+      );
+    } else {
+      core.debug(
+        `There is already a pull request to ${toBranch} from ${fromBranch}.`,
+        `You can view it here: ${currentPull.url}`
+      );
+    }
   } catch (error) {
     core.setFailed(error.message);
   }
