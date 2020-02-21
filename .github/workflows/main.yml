@@ -19,5 +19,6 @@ jobs:
         id: pull
         uses: ./
         with:
+          ACTIONS_RUNNER_DEBUG: true
           fromBranch: "master"
           toBranch: "develop"
