@@ -1990,11 +1990,8 @@ async function run() {
   try {
     console.log(`Making a PR to ${toBranch} from ${fromBranch}`);
 
-    const actionContext = await JSON.stringify(github.context, undefined, 2);
-    console.log(
-      "💣🔥>>>>>>>: run -> actionContext",
-      actionContext.payload.repository
-    );
+    const actionContext = github.context;
+    console.log("💣🔥>>>>>>>: run -> actionContext", actionContext);
 
     const octokit = new github.GitHub(githubToken);
 
