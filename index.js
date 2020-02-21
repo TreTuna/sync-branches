@@ -2,11 +2,13 @@ const core = require("@actions/core");
 const github = require("@actions/github");
 
 async function run() {
-  const fromBranch = core.getInput("FROM_BRANCH", { required: true });
-  const toBranch = core.getInput("TO_BRANCH", { required: true });
-  const githubToken = core.getInput("GITHUB_TOKEN", { required: true });
-
   try {
+    const fromBranch = core.getInput("FROM_BRANCH", { required: true });
+    const toBranch = core.getInput("TO_BRANCH", { required: true });
+    const githubToken = core.getInput("GITHUB_TOKEN", { required: true });
+    const pullRequestTitle = core.getInput("PULL_REQUEST_TITLE");
+    const pullRequestBody = core.getInput("PULL_REQUEST_BODY");
+
     console.log(`Making a pull request to ${toBranch} from ${fromBranch}.`);
 
     const {
@@ -28,9 +30,14 @@ async function run() {
       const { data: pullRequest } = await octokit.pulls.create({
         owner: repository.owner.login,
         repo: repository.name,
-        title: `sync: ${fromBranch} to ${toBranch}`,
         head: fromBranch,
-        base: toBranch
+        base: toBranch,
+        title: pullRequestTitle
+          ? pullRequestTitle
+          : `sync: ${fromBranch} to ${toBranch}`,
+        body: pullRequestBody
+          ? pullRequestBody
+          : `New code has just landed in ${fromBranch}, so let's bring ${toBranch} up to speed!`
       });
 
       console.log(

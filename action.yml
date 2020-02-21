@@ -12,7 +12,13 @@ inputs:
   TO_BRANCH:
     description: "Branch to make the pull-request against"
     required: true
-    default: "{'branches': ['develop']}"
+    default: "develop"
+  PULL_REQUEST_TITLE:
+    description: "What you would like as the title of the pull request. Default: 'sync: {FROM_BRANCH} to {TO_BRANCH}'"
+    required: false
+  PULL_REQUEST_BODY:
+    description: "What you would like in the body of the pull request. Default: 'New code has just landed in {fromBranch} so let's bring {toBranch} up to speed!'"
+    required: false
 runs:
   using: "node12"
   main: "dist/index.js"
