@@ -14,13 +14,15 @@ async function run() {
 
     const octokit = new github.GitHub(myToken);
 
-    octokit.pulls.create({
+    const { data: pullRequest } = await octokit.pulls.create({
       owner: actionContext.payload.repository.owner,
       repo: actionContext.payload.repository.name,
       title: `sync: ${fromBranch} to ${toBranch}`,
       head: fromBranch,
       base: toBranch
     });
+
+    console.log(pullRequest);
   } catch (error) {
     core.setFailed(error.message);
   }
