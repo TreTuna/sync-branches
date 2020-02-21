@@ -8,15 +8,17 @@ async function run() {
   try {
     console.log(`Making a PR to ${toBranch} from ${fromBranch}`);
     const actionContext = JSON.stringify(github.context, undefined, 2);
-    console.log(`The event context: ${actionContext}`);
+    const {
+      payload: { repository }
+    } = actionContext;
 
-    const myToken = core.getInput("myToken");
+    const githubToken = core.getInput("GITHUB_TOKEN");
 
-    const octokit = new github.GitHub(myToken);
+    const octokit = new github.GitHub(githubToken);
 
     const { data: pullRequest } = await octokit.pulls.create({
-      owner: actionContext.payload.repository.owner,
-      repo: actionContext.payload.repository.name,
+      owner: repository.owner,
+      repo: repository.name,
       title: `sync: ${fromBranch} to ${toBranch}`,
       head: fromBranch,
       base: toBranch
