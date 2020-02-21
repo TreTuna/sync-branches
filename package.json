@@ -28,8 +28,8 @@
     "@actions/github": "^2.1.0"
   },
   "devDependencies": {
-    "@zeit/ncc": "^0.20.5",
+    "@zeit/ncc": "^0.21.1",
     "eslint": "^6.3.0",
-    "jest": "^24.9.0"
+    "jest": "^25.1.0"
   }
 }
