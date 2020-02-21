@@ -9,13 +9,22 @@ async function run() {
   try {
     console.log(`Making a pull request to ${toBranch} from ${fromBranch}.`);
 
-    const actionContext = github.context;
+    const {
+      payload: { repository }
+    } = github.context;
 
     const octokit = new github.GitHub(githubToken);
 
+    const { data: currentPulls } = await octokit.pulls.list({
+      owner: repository.owner.name,
+      repo: repository.name
+    });
+
+    console.log("💣🔥>>>>>>>: run -> currentPulls", currentPulls);
+
     const { data: pullRequest } = await octokit.pulls.create({
-      owner: actionContext.payload.repository.owner.login,
-      repo: actionContext.payload.repository.name,
+      owner: repository.owner.login,
+      repo: repository.name,
       title: `sync: ${fromBranch} to ${toBranch}`,
       head: fromBranch,
       base: toBranch
