@@ -3,16 +3,13 @@ description: "GitHub Action to, upon successful merge, open a pull request to sy
 inputs:
   GITHUB_TOKEN:
     description: "User token to be associated with this pull request."
-    required: false
-    default: "1000"
+    required: true
   FROM_BRANCH:
     description: "Branch from make pull-request from"
     required: true
-    default: "master"
   TO_BRANCH:
     description: "Branch to make the pull-request against"
     required: true
-    default: "develop"
   PULL_REQUEST_TITLE:
     description: "What you would like as the title of the pull request. Default: 'sync: {FROM_BRANCH} to {TO_BRANCH}'"
     required: false
