@@ -2003,7 +2003,6 @@ async function run() {
     const currentPull = currentPulls.find(pull => {
       return pull.head.ref === fromBranch && pull.base.ref === toBranch;
     });
-    console.log("????>>>>>>>: run -> currentPull", currentPull);
 
     if (!currentPull) {
       const { data: pullRequest } = await octokit.pulls.create({
