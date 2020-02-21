@@ -19,6 +19,7 @@ jobs:
         id: pull
         uses: ./
         with:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           ACTIONS_RUNNER_DEBUG: true
-          fromBranch: "master"
-          toBranch: "develop"
+          FROM_BRANCH: "master"
+          TO_BRANCH: "develop"

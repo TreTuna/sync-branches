@@ -3,24 +3,27 @@ const github = require("@actions/github");
 
 // most @actions toolkit packages have async methods
 async function run() {
-  const fromBranch = core.getInput("FROM_BRANCH");
-  const toBranch = core.getInput("TO_BRANCH");
+  const fromBranch = core.getInput("FROM_BRANCH", { required: true });
+  const toBranch = core.getInput("TO_BRANCH", { required: true });
+  const githubToken = core.getInput("GITHUB_TOKEN", { required: true });
+
   try {
     console.log(`Making a PR to ${toBranch} from ${fromBranch}`);
-    const actionContext = JSON.stringify(github.context, undefined, 2);
-    console.log(`The event context: ${actionContext}`);
 
-    const myToken = core.getInput("myToken");
+    const actionContext = github.context;
+    console.log("💣🔥>>>>>>>: run -> actionContext", actionContext);
 
-    const octokit = new github.GitHub(myToken);
+    const octokit = new github.GitHub(githubToken);
 
-    octokit.pulls.create({
-      owner: actionContext.payload.repository.owner,
+    const { data: pullRequest } = await octokit.pulls.create({
+      owner: actionContext.payload.repository.owner.login,
       repo: actionContext.payload.repository.name,
       title: `sync: ${fromBranch} to ${toBranch}`,
       head: fromBranch,
       base: toBranch
     });
+
+    console.log("💣🔥>>>>>>>: run -> pullRequest", pullRequest);
   } catch (error) {
     core.setFailed(error.message);
   }
