@@ -1,7 +1,8 @@
 name: "Sync branches"
 description: "GitHub Action to, upon successful merge, open a pull request to sync the updated branch back to one or more other branches."
-icon: git-pull-request
-color: green
+branding:
+  icon: git-pull-request
+  color: green
 inputs:
   GITHUB_TOKEN:
     description: "User token to be associated with this pull request."
@@ -18,6 +19,9 @@ inputs:
   PULL_REQUEST_BODY:
     description: "What you would like in the body of the pull request. Default: 'New code has just landed in {fromBranch} so let's bring {toBranch} up to speed!'"
     required: false
+outputs:
+  PULL_REQUEST_URL:
+    description: "URL for either the generated pull request or the currently open one"
 runs:
   using: "node12"
   main: "dist/index.js"
