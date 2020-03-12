@@ -17,7 +17,7 @@ jobs:
           node-version: 12
       - name: Opening pull request
         id: pull
-        uses: tretuna/sync-branches@v1
+        uses: ./
         with:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           ACTIONS_RUNNER_DEBUG: true
