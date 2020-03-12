@@ -43,11 +43,15 @@ async function run() {
       console.log(
         `Pull request successful! You can view it here: ${pullRequest.url}.`
       );
+
+      core.setOutput("PULL_REQUEST_URL", pullRequest.url);
     } else {
       console.log(
         `There is already a pull request to ${toBranch} from ${fromBranch}.`,
         `You can view it here: ${currentPull.url}`
       );
+
+      core.setOutput("PULL_REQUEST_URL", currentPull.url);
     }
   } catch (error) {
     core.setFailed(error.message);

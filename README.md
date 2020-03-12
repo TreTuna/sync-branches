@@ -28,6 +28,12 @@ What you would like in the body of the pull request.
 
 Default: `sync-branches: New code has just landed in {FROM_BRANCH} so let's bring {TO_BRANCH} up to speed!`
 
+## Outputs
+
+### `PULL_REQUEST_URL`
+
+Set to the URL of either the pull request that was opened by this action or the one that was found to already be open between the two branches.
+
 ## Example usage
 
 ```YML
