@@ -2024,8 +2024,8 @@ async function run() {
           `Pull request (${pullRequest.number}) successful! You can view it here: ${pullRequest.url}.`
       );
 
-      core.setOutput("PULL_REQUEST_URL", pullRequest.url)
-      core.setOutput("PULL_REQUEST_NUMBER", pullRequest.number);
+      core.setOutput("PULL_REQUEST_URL", pullRequest.url.toString())
+      core.setOutput("PULL_REQUEST_NUMBER", pullRequest.number.toString());
 
     } else {
       console.log(
@@ -2033,8 +2033,8 @@ async function run() {
           `You can view it here: ${currentPull.url}`
       );
 
-      core.setOutput("PULL_REQUEST_URL", currentPull.url);
-      core.setOutput("PULL_REQUEST_NUMBER", currentPull.number);
+      core.setOutput("PULL_REQUEST_URL", currentPull.url.toString());
+      core.setOutput("PULL_REQUEST_NUMBER", currentPull.number.toString());
     }
   } catch (error) {
     core.setFailed(error.message);
