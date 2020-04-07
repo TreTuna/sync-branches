@@ -43,17 +43,19 @@ async function run() {
       });
 
       console.log(
-        `Pull request successful! You can view it here: ${pullRequest.url}.`
+        `Pull request (${pullRequest.number}) successful! You can view it here: ${pullRequest.url}.`
       );
 
-      core.setOutput("PULL_REQUEST_URL", pullRequest.url);
+      core.setOutput("PULL_REQUEST_URL", pullRequest.url.toString());
+      core.setOutput("PULL_REQUEST_NUMBER", pullRequest.number.toString());
     } else {
       console.log(
-        `There is already a pull request to ${toBranch} from ${fromBranch}.`,
+        `There is already a pull request (${currentPull.number}) to ${toBranch} from ${fromBranch}.`,
         `You can view it here: ${currentPull.url}`
       );
 
-      core.setOutput("PULL_REQUEST_URL", currentPull.url);
+      core.setOutput("PULL_REQUEST_URL", currentPull.url.toString());
+      core.setOutput("PULL_REQUEST_NUMBER", currentPull.number.toString());
     }
   } catch (error) {
     core.setFailed(error.message);
