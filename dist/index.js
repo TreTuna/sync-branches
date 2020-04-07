@@ -2019,7 +2019,7 @@ async function run() {
         body: pullRequestBody
           ? pullRequestBody
           : `sync-branches: New code has just landed in ${fromBranch}, so let's bring ${toBranch} up to speed!`,
-          draft: pullRequestIsDraft === 'y' ? true : false
+        draft: pullRequestIsDraft === 'y'
       });
 
       console.log(
