@@ -28,6 +28,12 @@ What you would like in the body of the pull request.
 
 Default: `sync-branches: New code has just landed in {FROM_BRANCH} so let's bring {TO_BRANCH} up to speed!`
 
+### `PULL_REQUEST_IS_DRAFT`
+
+Set to 'y' for the pull request to be opened as a draft.
+
+Default: 'n'
+
 ## Outputs
 
 ### `PULL_REQUEST_URL`
