@@ -32,7 +32,7 @@ Default: `sync-branches: New code has just landed in {FROM_BRANCH} so let's brin
 
 Set to `true` for the pull request to be opened as a draft.
 
-Default: 'n'
+Default: `false`
 
 ## Outputs
 
