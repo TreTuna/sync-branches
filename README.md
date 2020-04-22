@@ -30,7 +30,7 @@ Default: `sync-branches: New code has just landed in {FROM_BRANCH} so let's brin
 
 ### `PULL_REQUEST_IS_DRAFT`
 
-Set to 'y' for the pull request to be opened as a draft.
+Set to `true` for the pull request to be opened as a draft.
 
 Default: 'n'
 
