@@ -19,6 +19,9 @@ inputs:
   PULL_REQUEST_BODY:
     description: "What you would like in the body of the pull request. Default: 'New code has just landed in {fromBranch} so let's bring {toBranch} up to speed!'"
     required: false
+  PULL_REQUEST_IS_DRAFT:
+    description: "Set to 'true' for the pull request to be opened as a draft. Default: 'false'"
+    required: false
 outputs:
   PULL_REQUEST_URL:
     description: "URL for either the generated pull request or the currently open one"

@@ -1,6 +1,6 @@
 {
   "name": "sync-branches",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "GitHub Action to sync a branch when another one is updated",
   "main": "index.js",
   "author": "Tre Ammatuna <tre@tretuna.com>",

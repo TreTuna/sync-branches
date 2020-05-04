@@ -8,6 +8,7 @@ async function run() {
     const githubToken = core.getInput("GITHUB_TOKEN", { required: true });
     const pullRequestTitle = core.getInput("PULL_REQUEST_TITLE");
     const pullRequestBody = core.getInput("PULL_REQUEST_BODY");
+    const pullRequestIsDraft = core.getInput("PULL_REQUEST_IS_DRAFT").toLowerCase() === "true";
 
     console.log(`Making a pull request to ${toBranch} from ${fromBranch}.`);
 
@@ -37,7 +38,8 @@ async function run() {
           : `sync: ${fromBranch} to ${toBranch}`,
         body: pullRequestBody
           ? pullRequestBody
-          : `sync-branches: New code has just landed in ${fromBranch}, so let's bring ${toBranch} up to speed!`
+          : `sync-branches: New code has just landed in ${fromBranch}, so let's bring ${toBranch} up to speed!`,
+        draft: pullRequestIsDraft
       });
 
       console.log(
