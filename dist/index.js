@@ -1988,6 +1988,7 @@ async function run() {
     const githubToken = core.getInput("GITHUB_TOKEN", { required: true });
     const pullRequestTitle = core.getInput("PULL_REQUEST_TITLE");
     const pullRequestBody = core.getInput("PULL_REQUEST_BODY");
+    const pullRequestIsDraft = core.getInput("PULL_REQUEST_IS_DRAFT").toLowerCase() === "true";
 
     console.log(`Making a pull request to ${toBranch} from ${fromBranch}.`);
 
@@ -2017,17 +2018,25 @@ async function run() {
           : `sync: ${fromBranch} to ${toBranch}`,
         body: pullRequestBody
           ? pullRequestBody
-          : `sync-branches: New code has just landed in ${fromBranch}, so let's bring ${toBranch} up to speed!`
+          : `sync-branches: New code has just landed in ${fromBranch}, so let's bring ${toBranch} up to speed!`,
+        draft: pullRequestIsDraft
       });
 
       console.log(
-        `Pull request successful! You can view it here: ${pullRequest.url}.`
+          `Pull request (${pullRequest.number}) successful! You can view it here: ${pullRequest.url}.`
       );
+
+      core.setOutput("PULL_REQUEST_URL", pullRequest.url.toString())
+      core.setOutput("PULL_REQUEST_NUMBER", pullRequest.number.toString());
+
     } else {
       console.log(
-        `There is already a pull request to ${toBranch} from ${fromBranch}.`,
-        `You can view it here: ${currentPull.url}`
+          `There is already a pull request (${currentPull.number}) to ${toBranch} from ${fromBranch}.`,
+          `You can view it here: ${currentPull.url}`
       );
+
+      core.setOutput("PULL_REQUEST_URL", currentPull.url.toString());
+      core.setOutput("PULL_REQUEST_NUMBER", currentPull.number.toString());
     }
   } catch (error) {
     core.setFailed(error.message);
