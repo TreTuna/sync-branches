@@ -35,7 +35,7 @@ async function run() {
     }
 
     // Remove the label from PR.
-    octokit.issues.removeLabel({
+    await octokit.issues.removeLabel({
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,
       issue_number: sourcePull.id,
