@@ -10,9 +10,6 @@ inputs:
   FROM_BRANCH:
     description: "Branch from make pull-request from"
     required: true
-  MAIN_BRANCH:
-    description: "Main branch of the repo against which the PRs are created"
-    required: true
   REQUIRED_LABEL:
     description: "Required label for the PR"
     required: true
