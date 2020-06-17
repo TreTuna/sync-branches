@@ -42,9 +42,6 @@ async function run() {
       name: requiredLabel
     });
 
-    console.log(github.context);
-    console.log(github.context.sha);
-
     const newBranch = `${fromBranch}-dev`;
 
     // throws HttpError if branch already exists.
@@ -59,14 +56,16 @@ async function run() {
         throw Error(`Branch ${newBranch} already exists, Please delete and restart the workflow.`);
       }
     } catch(error) {
-      console.log(github.context);
-      console.log(github.context.sha);
+      // Get the last commit sha from `statuses_url`.
+      const statusUrl = github.context.payload.pull_request.statuses_url;
+      const sha = statusUrl.substring(statusUrl.lastIndexOf('/') + 1);
+
       if(error.name === 'HttpError' && error.status === 404) {
         await octokit.git.createRef({
           owner: repository.owner.login,
           repo: repository.name,
           ref: `refs/heads/${newBranch}`,
-          sha: github.context.sha
+          sha: sha
         })
       } else {
         throw Error(error)
