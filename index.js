@@ -57,12 +57,13 @@ async function run() {
       }
     } catch(error) {
       console.log(github);
+      console.log(github.context.pull_request);
       if(error.name === 'HttpError' && error.status === 404) {
         await octokit.git.createRef({
           owner: repository.owner.login,
           repo: repository.name,
           ref: `refs/heads/${newBranch}`,
-          sha: github.context.sha
+          sha: `refs/heads/${fromBranch}`
         })
       } else {
         throw Error(error)
