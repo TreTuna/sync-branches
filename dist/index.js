@@ -1980,12 +1980,12 @@ module.exports = require("os");
 
 const core = __webpack_require__(470);
 const github = __webpack_require__(469);
+const context = github.context;
 
 async function run() {
   try {
     const fromBranch = core.getInput("FROM_BRANCH", { required: true });
     const toBranch = core.getInput("TO_BRANCH", { required: true });
-    const mainBranch = core.getInput("MAIN_BRANCH", { required: true });
     const githubToken = core.getInput("GITHUB_TOKEN", { required: true });
     const requiredLabel = core.getInput("REQUIRED_LABEL", { required: true });
     const pullRequestTitle = core.getInput("PULL_REQUEST_TITLE");
@@ -2003,23 +2003,21 @@ async function run() {
       repo: repository.name
     });
 
-    const sourcePull = currentPulls.find(pull => {
-      return pull.head.ref === fromBranch && pull.base.ref === mainBranch;
-    });
-
-    const labels = sourcePull.labels;
-    const existingLabels = labels.filter(p => p.name == requiredLabel);
+    const labels = context.payload.pull_request.labels;
+      const existingLabels = labels.filter(label => label.name == requiredLabel);
 
     if ( existingLabels.length === 0 ) {
-      console.log(`PR does not have the label ${requiredLabel}`);
-      throw Error("Required label does not exist for the PR");
+      console.log( `PR does not have label '${requiredLabel}', Not assigning a reviewer.` );
+      core.ExitCode = 0;
+
+      return;
     }
 
     // Remove the label from PR.
     await octokit.issues.removeLabel({
       owner: repository.owner.login,
       repo: repository.name,
-      issue_number: sourcePull.number,
+      issue_number: context.payload.pull_request.number,
       name: requiredLabel
     });
 
@@ -2066,7 +2064,7 @@ async function run() {
           : `sync: ${fromBranch} to ${toBranch}`,
         body: pullRequestBody
           ? pullRequestBody
-          : `sync-branches: Merge #${sourcePull.number} to ${toBranch}`,
+          : `sync-branches: Merge #${context.payload.pull_request.number} to ${toBranch}`,
         draft: pullRequestIsDraft
       });
 
