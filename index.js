@@ -7,9 +7,21 @@ async function run() {
     const toBranch = core.getInput("TO_BRANCH", { required: true });
     const mainBranch = core.getInput("MAIN_BRANCH", { required: true });
     const githubToken = core.getInput("GITHUB_TOKEN", { required: true });
+    const requiredLabel = core.getInput("REQUIRED_LABEL", { required: true });
     const pullRequestTitle = core.getInput("PULL_REQUEST_TITLE");
     const pullRequestBody = core.getInput("PULL_REQUEST_BODY");
     const pullRequestIsDraft = core.getInput("PULL_REQUEST_IS_DRAFT").toLowerCase() === "true";
+
+    const sourcePull = currentPulls.find(pull => {
+      return pull.head.ref === fromBranch && pull.base.ref === mainBranch;
+    });
+
+    const labels = sourcePull.labels;
+    const existingLabels = labels.filter(p => p.name == requiredLabel);
+
+    if ( existingLabels.length === 0 ) {
+      throw "Required label does not exist for the PR";
+    }
 
     console.log(`Making a pull request to ${toBranch} from ${fromBranch}.`);
 
@@ -27,12 +39,6 @@ async function run() {
     const currentPull = currentPulls.find(pull => {
       return pull.head.ref === fromBranch && pull.base.ref === toBranch;
     });
-
-    const sourcePull = currentPulls.find(pull => {
-      return pull.head.ref === fromBranch && pull.base.ref === mainBranch;
-    });
-
-    console.log(sourcePull);
 
     if (!currentPull) {
       const { data: pullRequest } = await octokit.pulls.create({
