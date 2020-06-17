@@ -2070,8 +2070,8 @@ async function run() {
       const { data: pullRequest } = await octokit.pulls.create({
         owner: repository.owner.login,
         repo: repository.name,
-        head: fromBranch,
-        base: newBranch,
+        head: newBranch,
+        base: toBranch,
         title: pullRequestTitle
           ? pullRequestTitle
           : `sync: ${fromBranch} to ${toBranch}`,
