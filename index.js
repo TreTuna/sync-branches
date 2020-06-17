@@ -1,5 +1,5 @@
 const core = require("@actions/core");
-const { github, context } = require("@actions/github");
+const github = require("@actions/github");
 
 async function run() {
   try {
@@ -35,26 +35,6 @@ async function run() {
       throw Error("Required label does not exist for the PR");
     }
 
-    const newBranch = `${fromBranch}-dev`;
-
-    // throws HttpError if branch already exists.
-    try {
-      await octokit.repos.getBranch({
-        ...context.repo,
-        newBranch
-      });
-    } catch(error) {
-      if(error.name === 'HttpError' && error.status === 404) {
-        await octokit.git.createRef({
-          ref: `refs/heads/${newBranch}`,
-          sha: context.sha,
-          ...context.repo
-        })
-      } else {
-        throw Error(error)
-      }
-    }
-
     // Remove the label from PR.
     await octokit.issues.removeLabel({
       owner: repository.owner.login,
@@ -62,6 +42,26 @@ async function run() {
       issue_number: sourcePull.number,
       name: requiredLabel
     });
+
+    const newBranch = `${fromBranch}-dev`;
+
+    // throws HttpError if branch already exists.
+    try {
+      await octokit.repos.getBranch({
+        ...github.context.repo,
+        newBranch
+      });
+    } catch(error) {
+      if(error.name === 'HttpError' && error.status === 404) {
+        await octokit.git.createRef({
+          ref: `refs/heads/${newBranch}`,
+          sha: github.context.sha,
+          ...github.context.repo
+        })
+      } else {
+        throw Error(error)
+      }
+    }
 
     console.log(`Making a pull request to ${newBranch} from ${fromBranch}.`);
 
