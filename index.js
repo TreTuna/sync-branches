@@ -27,12 +27,21 @@ async function run() {
       return pull.head.ref === fromBranch && pull.base.ref === mainBranch;
     });
 
+    console.log(sourcePull);
+
     const labels = sourcePull.labels;
     const existingLabels = labels.filter(p => p.name == requiredLabel);
 
     if ( existingLabels.length === 0 ) {
       throw "Required label does not exist for the PR";
     }
+
+    // octokit.issues.removeLabel({
+    //   owner: github.context.repo.owner,
+    //   repo: github.context.repo.repo,
+    //   issue_number: prNumber,
+    //   name: requiredLabel
+    // })
 
     console.log(`Making a pull request to ${toBranch} from ${fromBranch}.`);
 
