@@ -2011,8 +2011,13 @@ async function run() {
     const existingLabels = labels.filter(p => p.name == requiredLabel);
 
     if ( existingLabels.length === 0 ) {
-      throw "Required label does not exist for the PR";
+      // throw "Required label does not exist for the PR";
     }
+
+    console.log(requiredLabel);
+    console.log(repository.owner.login);
+    console.log(repository.name);
+    console.log(sourcePull.id);
 
     // Remove the label from PR.
     await octokit.issues.removeLabel({
