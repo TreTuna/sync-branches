@@ -2036,14 +2036,15 @@ async function run() {
         throw Error(`Branch ${newBranch} already exists, Please delete and restart the workflow.`);
       }
     } catch(error) {
-      console.log(github);
+      console.log(github.context);
       console.log(github.context.pull_request);
+      console.log(github.context.sha);
       if(error.name === 'HttpError' && error.status === 404) {
         await octokit.git.createRef({
           owner: repository.owner.login,
           repo: repository.name,
           ref: `refs/heads/${newBranch}`,
-          sha: `refs/heads/${fromBranch}`
+          sha: github.context.sha
         })
       } else {
         throw Error(error)
