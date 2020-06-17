@@ -2027,26 +2027,13 @@ async function run() {
 
     // throws HttpError if branch already exists.
     try {
-      console.log({
+      const branch = await octokit.repos.getBranch({
         owner: repository.owner.login,
         repo: repository.name,
         branch: newBranch
       });
 
-      console.log({
-        owner: repository.owner.login,
-        repo: repository.name,
-        ref: `refs/heads/${newBranch}`,
-        sha: github.context.sha
-      });
-
-      console.log(github.context);
-
-      await octokit.repos.getBranch({
-        owner: repository.owner.login,
-        repo: repository.name,
-        branch: newBranch
-      });
+      console.log(branch);
     } catch(error) {
       if(error.name === 'HttpError' && error.status === 404) {
         await octokit.git.createRef({
