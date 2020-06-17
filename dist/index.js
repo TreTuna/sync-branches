@@ -2014,16 +2014,11 @@ async function run() {
       // throw "Required label does not exist for the PR";
     }
 
-    console.log(requiredLabel);
-    console.log(repository.owner.login);
-    console.log(repository.name);
-    console.log(sourcePull);
-
     // Remove the label from PR.
     await octokit.issues.removeLabel({
       owner: repository.owner.login,
       repo: repository.name,
-      issue_number: sourcePull.id,
+      issue_number: sourcePull.number,
       name: requiredLabel
     });
 
