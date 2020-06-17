@@ -2011,7 +2011,8 @@ async function run() {
     const existingLabels = labels.filter(p => p.name == requiredLabel);
 
     if ( existingLabels.length === 0 ) {
-      // throw "Required label does not exist for the PR";
+      console.log(`PR does not have the label ${requiredLabel}`);
+      throw "Required label does not exist for the PR";
     }
 
     // Remove the label from PR.
@@ -2039,7 +2040,7 @@ async function run() {
           : `sync: ${fromBranch} to ${toBranch}`,
         body: pullRequestBody
           ? pullRequestBody
-          : `sync-branches: New code has just landed in ${fromBranch}, so let's bring ${toBranch} up to speed!`,
+          : `sync-branches: Merge #${sourcePull.number} to ${toBranch}`,
         draft: pullRequestIsDraft
       });
 
