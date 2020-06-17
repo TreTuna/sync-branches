@@ -19,7 +19,7 @@ async function run() {
     const octokit = new github.GitHub(githubToken);
 
     const { data: currentPulls } = await octokit.pulls.list({
-      owner: repository.owner.name,
+      owner: repository.owner.login,
       repo: repository.name
     });
 
