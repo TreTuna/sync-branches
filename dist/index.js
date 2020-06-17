@@ -2017,7 +2017,7 @@ async function run() {
     console.log(requiredLabel);
     console.log(repository.owner.login);
     console.log(repository.name);
-    console.log(sourcePull.id);
+    console.log(sourcePull);
 
     // Remove the label from PR.
     await octokit.issues.removeLabel({
