@@ -32,7 +32,7 @@ async function run() {
 
     if ( existingLabels.length === 0 ) {
       console.log(`PR does not have the label ${requiredLabel}`);
-      throw "Required label does not exist for the PR";
+      throw Error("Required label does not exist for the PR");
     }
 
     // Remove the label from PR.
@@ -43,17 +43,43 @@ async function run() {
       name: requiredLabel
     });
 
-    console.log(`Making a pull request to ${toBranch} from ${fromBranch}.`);
+    const newBranch = `${fromBranch}-dev`;
+
+    // throws HttpError if branch already exists.
+    try {
+      const branch = await octokit.repos.getBranch({
+        owner: repository.owner.login,
+        repo: repository.name,
+        branch: newBranch
+      });
+
+      if ( branch.status === 200 ) {
+        throw Error(`Branch ${newBranch} already exists, Please delete and restart the workflow.`);
+      }
+    } catch(error) {
+      if(error.name === 'HttpError' && error.status === 404) {
+        await octokit.git.createRef({
+          owner: repository.owner.login,
+          repo: repository.name,
+          ref: `refs/heads/${newBranch}`,
+          sha: github.context.sha
+        })
+      } else {
+        throw Error(error)
+      }
+    }
+
+    console.log(`Making a pull request to ${newBranch} from ${fromBranch}.`);
 
     const currentPull = currentPulls.find(pull => {
-      return pull.head.ref === fromBranch && pull.base.ref === toBranch;
+      return pull.head.ref === fromBranch && pull.base.ref === newBranch;
     });
 
     if (!currentPull) {
       const { data: pullRequest } = await octokit.pulls.create({
         owner: repository.owner.login,
         repo: repository.name,
-        head: fromBranch,
+        head: newBranch,
         base: toBranch,
         title: pullRequestTitle
           ? pullRequestTitle
