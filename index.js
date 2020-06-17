@@ -5,6 +5,7 @@ async function run() {
   try {
     const fromBranch = core.getInput("FROM_BRANCH", { required: true });
     const toBranch = core.getInput("TO_BRANCH", { required: true });
+    const mainBranch = core.getInput("MAIN_BRANCH", { required: true });
     const githubToken = core.getInput("GITHUB_TOKEN", { required: true });
     const pullRequestTitle = core.getInput("PULL_REQUEST_TITLE");
     const pullRequestBody = core.getInput("PULL_REQUEST_BODY");
@@ -26,6 +27,12 @@ async function run() {
     const currentPull = currentPulls.find(pull => {
       return pull.head.ref === fromBranch && pull.base.ref === toBranch;
     });
+
+    const sourcePull = currentPulls.find(pull => {
+      return pull.head.ref === fromBranch && pull.base.ref === mainBranch;
+    });
+
+    console.log(sourcePull);
 
     if (!currentPull) {
       const { data: pullRequest } = await octokit.pulls.create({
