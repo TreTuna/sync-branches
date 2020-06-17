@@ -42,6 +42,9 @@ async function run() {
       name: requiredLabel
     });
 
+    console.log(github.context);
+    console.log(github.context.sha);
+
     const newBranch = `${fromBranch}-dev`;
 
     // throws HttpError if branch already exists.
@@ -57,7 +60,6 @@ async function run() {
       }
     } catch(error) {
       console.log(github.context);
-      console.log(github.context.pull_request);
       console.log(github.context.sha);
       if(error.name === 'HttpError' && error.status === 404) {
         await octokit.git.createRef({
