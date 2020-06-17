@@ -12,6 +12,15 @@ async function run() {
     const pullRequestBody = core.getInput("PULL_REQUEST_BODY");
     const pullRequestIsDraft = core.getInput("PULL_REQUEST_IS_DRAFT").toLowerCase() === "true";
 
+    const {
+      payload: { repository }
+    } = github.context;
+
+    const { data: currentPulls } = await octokit.pulls.list({
+      owner: repository.owner.login,
+      repo: repository.name
+    });
+
     const sourcePull = currentPulls.find(pull => {
       return pull.head.ref === fromBranch && pull.base.ref === mainBranch;
     });
@@ -25,16 +34,7 @@ async function run() {
 
     console.log(`Making a pull request to ${toBranch} from ${fromBranch}.`);
 
-    const {
-      payload: { repository }
-    } = github.context;
-
     const octokit = new github.GitHub(githubToken);
-
-    const { data: currentPulls } = await octokit.pulls.list({
-      owner: repository.owner.login,
-      repo: repository.name
-    });
 
     const currentPull = currentPulls.find(pull => {
       return pull.head.ref === fromBranch && pull.base.ref === toBranch;
