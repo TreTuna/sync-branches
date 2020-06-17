@@ -36,12 +36,13 @@ async function run() {
       throw "Required label does not exist for the PR";
     }
 
-    // octokit.issues.removeLabel({
-    //   owner: github.context.repo.owner,
-    //   repo: github.context.repo.repo,
-    //   issue_number: prNumber,
-    //   name: requiredLabel
-    // })
+    // Remove the label from PR.
+    octokit.issues.removeLabel({
+      owner: github.context.repo.owner,
+      repo: github.context.repo.repo,
+      issue_number: sourcePull.id,
+      name: requiredLabel
+    })
 
     console.log(`Making a pull request to ${toBranch} from ${fromBranch}.`);
 
