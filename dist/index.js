@@ -2016,11 +2016,11 @@ async function run() {
 
     // Remove the label from PR.
     await octokit.issues.removeLabel({
-      owner: github.context.repo.owner,
-      repo: github.context.repo.repo,
+      owner: repository.owner.login,
+      repo: repository.name,
       issue_number: sourcePull.id,
       name: requiredLabel
-    })
+    });
 
     console.log(`Making a pull request to ${toBranch} from ${fromBranch}.`);
 
