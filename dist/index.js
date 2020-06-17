@@ -1996,6 +1996,8 @@ async function run() {
       payload: { repository }
     } = github.context;
 
+    const octokit = new github.GitHub(githubToken);
+
     const { data: currentPulls } = await octokit.pulls.list({
       owner: repository.owner.login,
       repo: repository.name
@@ -2013,8 +2015,6 @@ async function run() {
     }
 
     console.log(`Making a pull request to ${toBranch} from ${fromBranch}.`);
-
-    const octokit = new github.GitHub(githubToken);
 
     const currentPull = currentPulls.find(pull => {
       return pull.head.ref === fromBranch && pull.base.ref === toBranch;
