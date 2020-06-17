@@ -27,8 +27,6 @@ async function run() {
       return pull.head.ref === fromBranch && pull.base.ref === mainBranch;
     });
 
-    console.log(sourcePull);
-
     const labels = sourcePull.labels;
     const existingLabels = labels.filter(p => p.name == requiredLabel);
 
