@@ -2073,6 +2073,14 @@ async function run() {
         draft: pullRequestIsDraft
       });
 
+      // Assign the backport PR to original PR author.
+      await octokit.issues.addAssignees({
+        owner: repository.owner.login,
+        repo: repository.name,
+        issue_number: pullRequest.number,
+        assignees: context.payload.pull_request.user.login
+      });
+
       console.log(
         `Pull request (${pullRequest.number}) successful! You can view it here: ${pullRequest.url}.`
       );
