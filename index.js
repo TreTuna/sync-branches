@@ -1,16 +1,27 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
+const context = github.context;
 
 async function run() {
   try {
     const fromBranch = core.getInput("FROM_BRANCH", { required: true });
     const toBranch = core.getInput("TO_BRANCH", { required: true });
     const githubToken = core.getInput("GITHUB_TOKEN", { required: true });
+    const requiredLabel = core.getInput("REQUIRED_LABEL", { required: true });
     const pullRequestTitle = core.getInput("PULL_REQUEST_TITLE");
     const pullRequestBody = core.getInput("PULL_REQUEST_BODY");
     const pullRequestIsDraft = core.getInput("PULL_REQUEST_IS_DRAFT").toLowerCase() === "true";
 
-    console.log(`Making a pull request to ${toBranch} from ${fromBranch}.`);
+    // Check if required label exists for the PR.
+    const labels = context.payload.pull_request.labels;
+    const existingLabels = labels.filter(label => label.name == requiredLabel);
+
+    if ( existingLabels.length === 0 ) {
+      console.log( `PR does not have label '${requiredLabel}', Not assigning a reviewer.` );
+      core.ExitCode = 0;
+
+      return;
+    }
 
     const {
       payload: { repository }
@@ -19,27 +30,75 @@ async function run() {
     const octokit = new github.GitHub(githubToken);
 
     const { data: currentPulls } = await octokit.pulls.list({
-      owner: repository.owner.name,
+      owner: repository.owner.login,
       repo: repository.name
     });
 
+    // Remove the label from PR.
+    await octokit.issues.removeLabel({
+      owner: repository.owner.login,
+      repo: repository.name,
+      issue_number: context.payload.pull_request.number,
+      name: requiredLabel
+    });
+
+    const newBranch = `${fromBranch}-dev`;
+
+    // throws HttpError if branch already exists.
+    try {
+      const branch = await octokit.repos.getBranch({
+        owner: repository.owner.login,
+        repo: repository.name,
+        branch: newBranch
+      });
+
+      if ( branch.status === 200 ) {
+        throw Error(`Branch ${newBranch} already exists, Please delete and restart the workflow.`);
+      }
+    } catch(error) {
+      // Get the last commit sha from `statuses_url`.
+      const statusUrl = github.context.payload.pull_request.statuses_url;
+      const sha = statusUrl.substring(statusUrl.lastIndexOf('/') + 1);
+
+      if(error.name === 'HttpError' && error.status === 404) {
+        await octokit.git.createRef({
+          owner: repository.owner.login,
+          repo: repository.name,
+          ref: `refs/heads/${newBranch}`,
+          sha: sha
+        })
+      } else {
+        throw Error(error)
+      }
+    }
+
+    console.log(`Making a pull request to ${newBranch} from ${fromBranch}.`);
+
     const currentPull = currentPulls.find(pull => {
-      return pull.head.ref === fromBranch && pull.base.ref === toBranch;
+      return pull.head.ref === fromBranch && pull.base.ref === newBranch;
     });
 
     if (!currentPull) {
       const { data: pullRequest } = await octokit.pulls.create({
         owner: repository.owner.login,
         repo: repository.name,
-        head: fromBranch,
+        head: newBranch,
         base: toBranch,
         title: pullRequestTitle
           ? pullRequestTitle
           : `sync: ${fromBranch} to ${toBranch}`,
         body: pullRequestBody
           ? pullRequestBody
-          : `sync-branches: New code has just landed in ${fromBranch}, so let's bring ${toBranch} up to speed!`,
+          : `sync-branches: Merge #${context.payload.pull_request.number} to ${toBranch}`,
         draft: pullRequestIsDraft
+      });
+
+      // Assign the backport PR to original PR author.
+      await octokit.issues.addAssignees({
+        owner: repository.owner.login,
+        repo: repository.name,
+        issue_number: pullRequest.number,
+        assignees: context.payload.pull_request.user.login
       });
 
       console.log(

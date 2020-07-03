@@ -10,6 +10,9 @@ inputs:
   FROM_BRANCH:
     description: "Branch from make pull-request from"
     required: true
+  REQUIRED_LABEL:
+    description: "Required label for the PR"
+    required: true
   TO_BRANCH:
     description: "Branch to make the pull-request against"
     required: true
