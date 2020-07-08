@@ -12,17 +12,6 @@ async function run() {
     const pullRequestBody = core.getInput("PULL_REQUEST_BODY");
     const pullRequestIsDraft = core.getInput("PULL_REQUEST_IS_DRAFT").toLowerCase() === "true";
 
-    // Check if required label exists for the PR.
-    const labels = context.payload.pull_request.labels;
-    const existingLabels = labels.filter(label => label.name == requiredLabel);
-
-    if ( existingLabels.length === 0 ) {
-      console.log( `PR does not have label '${requiredLabel}', Not assigning a reviewer.` );
-      core.ExitCode = 0;
-
-      return;
-    }
-
     const {
       payload: { repository }
     } = github.context;
@@ -53,7 +42,14 @@ async function run() {
       });
 
       if ( branch.status === 200 ) {
-        throw Error(`Branch ${newBranch} already exists, Please delete and restart the workflow.`);
+        await octokit.issues.createComment({
+          owner: repository.owner.login,
+          repo: repository.name,
+          issue_number: context.payload.pull_request.number,
+          body: `Sync has failed as the branch \`${newBranch}\` already exists. Please delete the branch and restart the workflow.`,
+        });
+        
+        throw Error(`Sync has failed as the branch \`${newBranch}\` already exists. Please delete the branch and restart the workflow.`);
       }
     } catch(error) {
       // Get the last commit sha from `statuses_url`.
