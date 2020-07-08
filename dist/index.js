@@ -550,10 +550,10 @@ async function run() {
           owner: repository.owner.login,
           repo: repository.name,
           issue_number: context.payload.pull_request.number,
-          body: `Branch \`${newBranch}\` already exists, Please delete and restart the workflow.`,
+          body: `Sync failed as the branch \`${newBranch}\` already exists, Please delete and restart the workflow.`,
         });
         
-        throw Error(`Branch ${newBranch} already exists, Please delete and restart the workflow.`);
+        throw Error(`Sync failed as the branch \`${newBranch}\` already exists, Please delete and restart the workflow.`);
       }
     } catch(error) {
       // Get the last commit sha from `statuses_url`.
