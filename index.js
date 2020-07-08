@@ -42,6 +42,13 @@ async function run() {
       });
 
       if ( branch.status === 200 ) {
+        await octokit.issues.createComment({
+          owner: repository.owner.login,
+          repo: repository.name,
+          issue_number: context.payload.pull_request.number,
+          body: `Branch \`${newBranch}\` already exists, Please delete and restart the workflow.`,
+        });
+        
         throw Error(`Branch ${newBranch} already exists, Please delete and restart the workflow.`);
       }
     } catch(error) {
