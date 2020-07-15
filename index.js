@@ -89,6 +89,13 @@ async function run() {
         draft: pullRequestIsDraft
       });
 
+      // Update the branch to head branch.
+      await octokit.pulls.updateBranch({
+        owner: repository.owner.login,
+        repo: repository.name,
+        pull_number: pullRequest.number,
+      });
+
       // Assign the backport PR to original PR author.
       await octokit.issues.addAssignees({
         owner: repository.owner.login,
