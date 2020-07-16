@@ -594,10 +594,13 @@ async function run() {
       });
 
       // Update the branch to head branch.
-      await octokit.pulls.updateBranch({
+      // Skip CI build for this commit.
+      await octokit.repos.merge({
         owner: repository.owner.login,
         repo: repository.name,
-        pull_number: pullRequest.number,
+        base: newBranch,
+        head: toBranch,        
+        commit_message: `[skip ci] Merge ${toBranch} to ${newBranch}`
       });
 
       // Assign the backport PR to original PR author.
