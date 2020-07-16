@@ -16,6 +16,8 @@ async function run() {
       payload: { repository }
     } = github.context;
 
+    console.log(github.context);
+
     const octokit = new github.GitHub(githubToken);
 
     const { data: currentPulls } = await octokit.pulls.list({
