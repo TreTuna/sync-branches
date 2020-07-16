@@ -595,13 +595,18 @@ async function run() {
 
       // Update the branch to head branch.
       // Skip CI build for this commit.
-      await octokit.repos.merge({
-        owner: repository.owner.login,
-        repo: repository.name,
-        base: newBranch,
-        head: toBranch,        
-        commit_message: `[skip ci] Merge ${toBranch} to ${newBranch}`
-      });
+      try {
+        await octokit.repos.merge({
+          owner: repository.owner.login,
+          repo: repository.name,
+          base: newBranch,
+          head: toBranch,        
+          commit_message: `[skip ci] Merge ${toBranch} to ${newBranch}`
+        });
+      } catch(error) {
+        console.log(`Could not udpate the branch - `);
+        console.log(error);
+      }
 
       // Assign the backport PR to original PR author.
       await octokit.issues.addAssignees({
