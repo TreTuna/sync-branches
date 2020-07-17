@@ -100,24 +100,13 @@ async function run() {
           commit_message: `[skip ci] Merge ${toBranch} to ${newBranch}`
         });
 
-        // Test comment, to remove.
-        await octokit.issues.createComment({
-          owner: repository.owner.login,
-          repo: repository.name,
-          issue_number: pullRequest.number,
-          body: `Could not merge the branch \`development\` into the branch \`branch-merge-test-dev\` because of the merge conflicts. To fix the merge-conflict locally run the following commands -  
-\`\`\`
-git fetch origin && git checkout ${newBranch} \n
-git pull origin ${toBranch}
-\`\`\``,
-        });
       } catch(error) {
 
         await octokit.issues.createComment({
           owner: repository.owner.login,
           repo: repository.name,
           issue_number: pullRequest.number,
-          body: `Could not merge the branch \`development\` into the branch \`branch-merge-test-dev\` because of the merge conflicts. To fix the merge-conflict locally run the following commands -  
+          body: `Could not merge the branch \`development\` into the branch \`branch-merge-test-dev\` because of the merge conflicts. To fix the merge-conflict run the following commands -  
 \`\`\`
 git fetch origin && git checkout ${newBranch} \n
 git pull origin ${toBranch}
