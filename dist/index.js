@@ -520,8 +520,6 @@ async function run() {
       payload: { repository }
     } = github.context;
 
-    console.log(github.context);
-
     const octokit = new github.GitHub(githubToken);
 
     const { data: currentPulls } = await octokit.pulls.list({
@@ -605,7 +603,31 @@ async function run() {
           head: toBranch,        
           commit_message: `[skip ci] Merge ${toBranch} to ${newBranch}`
         });
+
+        // Test comment, to remove.
+        await octokit.issues.createComment({
+          owner: repository.owner.login,
+          repo: repository.name,
+          issue_number: context.payload.pull_request.number,
+          body: `Cound not merge the branch ${toBranch} into ${newBranch} because of merge conflicts. To fix the merge-conflict locally run the following commands - 
+            \`\`\`
+            git fetch origin && git checkout ${newBranch}
+            git pull origin ${toBranch}
+            \`\`\``,
+        });
       } catch(error) {
+
+        await octokit.issues.createComment({
+          owner: repository.owner.login,
+          repo: repository.name,
+          issue_number: context.payload.pull_request.number,
+          body: `Cound not merge the branch ${toBranch} into ${newBranch} because of merge conflicts. To fix the merge-conflict locally run the following commands - 
+            \`\`\`
+            git fetch origin && git checkout ${newBranch}
+            git pull origin ${toBranch}
+            \`\`\``,
+        });
+
         console.log(`Could not udpate the branch - `);
         console.log(error);
       }
