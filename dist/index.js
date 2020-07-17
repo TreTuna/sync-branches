@@ -593,34 +593,6 @@ async function run() {
         draft: pullRequestIsDraft
       });
 
-      // Update the branch to head branch.
-      // Skip CI build for this commit.
-      try {
-        await octokit.repos.merge({
-          owner: repository.owner.login,
-          repo: repository.name,
-          base: newBranch,
-          head: toBranch,        
-          commit_message: `[skip ci] Merge ${toBranch} to ${newBranch}`
-        });
-
-      } catch(error) {
-
-        await octokit.issues.createComment({
-          owner: repository.owner.login,
-          repo: repository.name,
-          issue_number: pullRequest.number,
-          body: `Could not merge the branch \`development\` into the branch \`branch-merge-test-dev\` because of the merge conflicts. To fix the merge-conflict run the following commands -  
-\`\`\`
-git fetch origin && git checkout ${newBranch} \n
-git pull origin ${toBranch}
-\`\`\``,
-        });
-
-        console.log(`Could not udpate the branch - `);
-        console.log(error);
-      }
-
       // Assign the backport PR to original PR author.
       await octokit.issues.addAssignees({
         owner: repository.owner.login,
