@@ -23,21 +23,6 @@ async function run() {
       repo: repository.name
     });
 
-    try {
-      // Remove the label from PR.
-      await octokit.issues.removeLabel({
-        owner: repository.owner.login,
-        repo: repository.name,
-        issue_number: context.payload.pull_request.number,
-        name: requiredLabel
-      });
-    } catch (error) {
-      console.log('Could not remove the label from the PR');
-      console.log(error);
-
-      return;
-    }
-
     const newBranch = `${fromBranch}-dev`;
 
     // throws HttpError if branch already exists.
