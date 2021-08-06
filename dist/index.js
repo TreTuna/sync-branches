@@ -1992,16 +1992,10 @@ async function run() {
 
     console.log(`Making a pull request to ${toBranch} from ${fromBranch}.`);
 
-    const {
-      payload: { repository }
-    } = github.context;
-
     const octokit = new github.GitHub(githubToken);
 
-    const { data: currentPulls } = await octokit.pulls.list({
-      owner: repository.owner.name,
-      repo: repository.name
-    });
+    const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
+    const { data: currentPulls } = await octokit.pulls.list({ owner, repo });
 
     const currentPull = currentPulls.find(pull => {
       return pull.head.ref === fromBranch && pull.base.ref === toBranch;
@@ -2009,8 +2003,8 @@ async function run() {
 
     if (!currentPull) {
       const { data: pullRequest } = await octokit.pulls.create({
-        owner: repository.owner.login,
-        repo: repository.name,
+        owner,
+        repo,
         head: fromBranch,
         base: toBranch,
         title: pullRequestTitle
