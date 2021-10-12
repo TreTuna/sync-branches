@@ -17,7 +17,7 @@ async function run() {
 
     console.log(`Should a pull request to ${toBranch} from ${fromBranch} be created?`);
 
-    const octokit = new github.GitHub(githubToken);
+    const octokit = new github.getOctokit(githubToken);
 
     const { data: currentPulls } = await octokit.pulls.list({ owner, repo });
 
