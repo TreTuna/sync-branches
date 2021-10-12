@@ -12,6 +12,8 @@ async function run() {
     const pullRequestBody = core.getInput("PULL_REQUEST_BODY");
     const pullRequestIsDraft = core.getInput("PULL_REQUEST_IS_DRAFT").toLowerCase() === "true";
     const contentComparison = core.getInput("CONTENT_COMPARISON").toLowerCase() === "true";
+    const reviewers = JSON.parse(core.getInput("REVIEWERS"));
+    const team_reviewers = JSON.parse(core.getInput("TEAM_REVIEWERS"));
 
     console.log(`Should a pull request to ${toBranch} from ${fromBranch} be created?`);
 
@@ -43,6 +45,16 @@ async function run() {
             : `sync-branches: New code has just landed in ${fromBranch}, so let's bring ${toBranch} up to speed!`,
           draft: pullRequestIsDraft
         });
+
+        if(reviewers.length > 0 || team_reviewers.length > 0){
+          octokit.rest.pulls.requestReviewers({
+            owner,
+            repo,
+            pull_number: pullRequest.number,
+            reviewers,
+            team_reviewers
+          });
+        }
 
         console.log(
           `Pull request (${pullRequest.number}) successful! You can view it here: ${pullRequest.url}`

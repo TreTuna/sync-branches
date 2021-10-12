@@ -25,6 +25,14 @@ inputs:
   CONTENT_COMPARISON:
     description: "Set to 'true' to force checking content comparison between the branches. Default: 'false'"
     required: false
+  REVIEWERS:
+    description: "JSON array of GitHub user `login`s that will be requested to review the PR. Example: '['tretuna']'"
+    required: false
+    default: '[]'
+  TEAM_REVIEWERS:
+    description: "JSON array of GitHub team `slug`s that will be requested to review the PR. Example: '['js-team']'"
+    required: false
+    default: '[]'
 outputs:
   PULL_REQUEST_URL:
     description: "URL for either the generated pull request or the currently open one"
