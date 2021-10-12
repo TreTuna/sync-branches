@@ -303,7 +303,10 @@ async function run() {
 
     const octokit = new github.getOctokit(githubToken);
 
-    const { data: currentPulls } = await octokit.pulls.list({ owner, repo });
+    const { data: currentPulls } = await octokit.rest.pulls.list({
+      owner,
+      repo,
+    });
 
     const currentPull = currentPulls.find((pull) => {
       return pull.head.ref === fromBranch && pull.base.ref === toBranch;
@@ -320,7 +323,7 @@ async function run() {
       }
 
       if (shouldCreatePullRequest) {
-        const { data: pullRequest } = await octokit.pulls.create({
+        const { data: pullRequest } = await octokit.rest.pulls.create({
           owner,
           repo,
           head: fromBranch,
@@ -370,7 +373,7 @@ async function run() {
 }
 
 async function hasContentDifference(octokit, fromBranch, toBranch) {
-  const { data: response } = await octokit.repos.compareCommits({
+  const { data: response } = await octokit.rest.repos.compareCommits({
     owner,
     repo,
     base: toBranch,
