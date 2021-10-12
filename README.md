@@ -59,7 +59,7 @@ name: Sync
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   sync-branches:
@@ -77,6 +77,6 @@ jobs:
         uses: tretuna/sync-branches@1.3.0
         with:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          FROM_BRANCH: "master"
+          FROM_BRANCH: "main"
           TO_BRANCH: "develop"
 ```
