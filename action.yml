@@ -22,6 +22,9 @@ inputs:
   PULL_REQUEST_IS_DRAFT:
     description: "Set to 'true' for the pull request to be opened as a draft. Default: 'false'"
     required: false
+  CONTENT_COMPARISON:
+    description: "Set to 'true' to force checking content comparison between the branches. Default: 'false'"
+    required: false
 outputs:
   PULL_REQUEST_URL:
     description: "URL for either the generated pull request or the currently open one"

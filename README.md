@@ -34,6 +34,13 @@ Set to `true` for the pull request to be opened as a draft.
 
 Default: `false`
 
+### `CONTENT_COMPARISON`
+
+Set to `true` to force checking content comparison between branches.
+No more empty pull requests being opened and triggering CI jobs.
+
+Default: `false`
+
 ## Outputs
 
 ### `PULL_REQUEST_URL`
@@ -67,7 +74,7 @@ jobs:
           node-version: 12
       - name: Opening pull request
         id: pull
-        uses: tretuna/sync-branches@1.2.0
+        uses: tretuna/sync-branches@1.3.0
         with:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           FROM_BRANCH: "master"
