@@ -2,7 +2,7 @@ name: Sync
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   sync-branches:
@@ -20,6 +20,5 @@ jobs:
         uses: ./
         with:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          ACTIONS_RUNNER_DEBUG: true
-          FROM_BRANCH: "master"
+          FROM_BRANCH: "main"
           TO_BRANCH: "develop"
