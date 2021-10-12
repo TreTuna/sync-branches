@@ -1,6 +1,8 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
 
+const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
+
 async function run() {
   try {
     const fromBranch = core.getInput("FROM_BRANCH", { required: true });
@@ -13,16 +15,9 @@ async function run() {
 
     console.log(`Should a pull request to ${toBranch} from ${fromBranch} be created?`);
 
-    const {
-      payload: { repository }
-    } = github.context;
-
     const octokit = new github.GitHub(githubToken);
 
-    const { data: currentPulls } = await octokit.pulls.list({
-      owner: repository.owner.name,
-      repo: repository.name
-    });
+    const { data: currentPulls } = await octokit.pulls.list({ owner, repo });
 
     const currentPull = currentPulls.find(pull => {
       return pull.head.ref === fromBranch && pull.base.ref === toBranch;
@@ -31,13 +26,13 @@ async function run() {
     if (!currentPull) {
       let shouldCreatePullRequest = true;
       if (contentComparison) {
-        shouldCreatePullRequest = await hasContentDifference(octokit, repository, fromBranch, toBranch);
+        shouldCreatePullRequest = await hasContentDifference(octokit, fromBranch, toBranch);
       }
 
       if (shouldCreatePullRequest) {
         const { data: pullRequest } = await octokit.pulls.create({
-          owner: repository.owner.login,
-          repo: repository.name,
+          owner,
+          repo,
           head: fromBranch,
           base: toBranch,
           title: pullRequestTitle
@@ -72,10 +67,10 @@ async function run() {
   }
 }
 
-async function hasContentDifference(octokit, repository, fromBranch, toBranch) {
+async function hasContentDifference(octokit, fromBranch, toBranch) {
   const { data: response } = await octokit.repos.compareCommits({
-      owner: repository.owner.name,
-      repo: repository.name,
+      owner,
+      repo,
       base: toBranch,
       head: fromBranch,
       page: 1,
