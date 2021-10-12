@@ -20,6 +20,5 @@ jobs:
         uses: ./
         with:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          ACTIONS_RUNNER_DEBUG: true
           FROM_BRANCH: "main"
           TO_BRANCH: "develop"
