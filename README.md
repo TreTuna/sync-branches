@@ -40,13 +40,26 @@ Set to `true` to force checking content comparison between branches.
 No more empty pull requests being opened and triggering CI jobs.
 
 Default: `false`
+### `REVIEWERS`
+
+JSON array of GitHub user `login`s that will be requested to review the PR.
+
+Example: `'["tretuna"]'`
+
+Default: `[]`
+### `TEAM_REVIEWERS`
+
+JSON array of GitHub team `slug`s that will be requested to review the PR.
+
+Example: `'["js-team"]'`
+
+Default: `[]`
 
 ## Outputs
 
 ### `PULL_REQUEST_URL`
 
-Set to the URL of either the pull request that was opened by this action or the one that was found to already be open between the two branches.
-
+Set to the URL of either the pull request that was opened by this action or the one that was found to already be open between the two branches
 
 ### `PULL_REQUEST_NUMBER`
 
@@ -74,7 +87,7 @@ jobs:
           node-version: 12
       - name: Opening pull request
         id: pull
-        uses: tretuna/sync-branches@1.3.0
+        uses: tretuna/sync-branches@1.4.0
         with:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           FROM_BRANCH: "main"
