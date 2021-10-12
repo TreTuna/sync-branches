@@ -42,12 +42,16 @@ No more empty pull requests being opened and triggering CI jobs.
 Default: `false`
 ### `REVIEWERS`
 
-JSON array of GitHub user `login`s that will be requested to review the PR. Example: '['tretuna']'
+JSON array of GitHub user `login`s that will be requested to review the PR.
+
+Example: `'["tretuna"]'`
 
 Default: `[]`
 ### `TEAM_REVIEWERS`
 
-JSON array of GitHub team `slug`s that will be requested to review the PR. Example: '['js-team']'
+JSON array of GitHub team `slug`s that will be requested to review the PR.
+
+Example: `'["js-team"]'`
 
 Default: `[]`
 
