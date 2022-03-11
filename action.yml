@@ -33,6 +33,10 @@ inputs:
     description: "JSON array of GitHub team `slug`s that will be requested to review the PR. Example: '['js-team']'"
     required: false
     default: '[]'
+  LABELS:
+    description: "JSON array of label names that will be added to the PR. Example: '['sync']'"
+    required: false
+    default: '[]'
 outputs:
   PULL_REQUEST_URL:
     description: "URL for either the generated pull request or the currently open one"
