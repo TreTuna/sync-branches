@@ -16,6 +16,7 @@ async function run() {
       core.getInput("CONTENT_COMPARISON").toLowerCase() === "true";
     const reviewers = JSON.parse(core.getInput("REVIEWERS"));
     const team_reviewers = JSON.parse(core.getInput("TEAM_REVIEWERS"));
+    const labels = JSON.parse(core.getInput("LABELS"));
 
     console.log(
       `Should a pull request to ${toBranch} from ${fromBranch} be created?`
@@ -65,6 +66,15 @@ async function run() {
             reviewers,
             team_reviewers,
           });
+        }
+
+        if (labels.length > 0) {
+          octokit.rest.issues.addLabels({
+            owner,
+            repo,
+            issue_number: pullRequest.number,
+            labels
+          })
         }
 
         console.log(
