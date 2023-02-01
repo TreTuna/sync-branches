@@ -43,5 +43,5 @@ outputs:
   PULL_REQUEST_NUMBER:
     description: "Pull request number from generated pull request or the currently open one"
 runs:
-  using: "node12"
+  using: "node16"
   main: "dist/index.js"
