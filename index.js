@@ -10,6 +10,7 @@ async function run() {
     const githubToken = core.getInput("GITHUB_TOKEN", { required: true });
     const pullRequestTitle = core.getInput("PULL_REQUEST_TITLE");
     const pullRequestBody = core.getInput("PULL_REQUEST_BODY");
+    const pullRequestAutoMergeMethod = core.getInput("PULL_REQUEST_AUTO_MERGE_METHOD");
     const pullRequestIsDraft =
       core.getInput("PULL_REQUEST_IS_DRAFT").toLowerCase() === "true";
     const contentComparison =
@@ -17,6 +18,7 @@ async function run() {
     const reviewers = JSON.parse(core.getInput("REVIEWERS"));
     const team_reviewers = JSON.parse(core.getInput("TEAM_REVIEWERS"));
     const labels = JSON.parse(core.getInput("LABELS"));
+    let isMerged = false;
 
     console.log(
       `Should a pull request to ${toBranch} from ${fromBranch} be created?`
@@ -77,8 +79,22 @@ async function run() {
           })
         }
 
+        if (pullRequestAutoMergeMethod) {
+          try {
+            await octokit.rest.pulls.merge({
+              owner,
+              repo,
+              pull_number: pullRequest.number,
+              merge_method: pullRequestAutoMergeMethod
+            });
+            isMerged = true;
+          } catch (err) {
+            isMerged = false;
+          }
+        }
+
         console.log(
-          `Pull request (${pullRequest.number}) successful! You can view it here: ${pullRequest.url}`
+          `Pull request (${pullRequest.number}) successfully created${isMerged ? ' and merged' : ' '}! You can view it here: ${pullRequest.url}`
         );
 
         core.setOutput("PULL_REQUEST_URL", pullRequest.url.toString());
