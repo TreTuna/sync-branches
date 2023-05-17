@@ -37,6 +37,10 @@ inputs:
     description: "JSON array of label names that will be added to the PR. Example: '['sync']'"
     required: false
     default: '[]'
+  PULL_REQUEST_AUTO_MERGE_METHOD:
+    description: "Set a merge method for auto merging. Options: 'merge', 'squash', 'rebase'"
+    required: false
+    default: 'false'
 outputs:
   PULL_REQUEST_URL:
     description: "URL for either the generated pull request or the currently open one"
