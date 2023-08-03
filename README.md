@@ -65,6 +65,10 @@ Set to the URL of either the pull request that was opened by this action or the 
 
 Pull request number from generated pull request or the currently open one
 
+### `PULL_REQUEST_CREATED`
+
+'1' if a pull request was opened by this action or '0' if a pull request was found to already be open between the two branches.
+
 ## Example usage
 
 ```YML
