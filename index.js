@@ -96,7 +96,8 @@ async function run() {
         console.log(
           `Pull request (${pullRequest.number}) successfully created${isMerged ? ' and merged' : ' '}! You can view it here: ${pullRequest.url}`
         );
-
+        
+        core.setOutput("PULL_REQUEST_CREATED", '1');
         core.setOutput("PULL_REQUEST_URL", pullRequest.url.toString());
         core.setOutput("PULL_REQUEST_NUMBER", pullRequest.number.toString());
       } else {
@@ -110,6 +111,7 @@ async function run() {
         `You can view it here: ${currentPull.url}`
       );
 
+      core.setOutput("PULL_REQUEST_CREATED", '0');
       core.setOutput("PULL_REQUEST_URL", currentPull.url.toString());
       core.setOutput("PULL_REQUEST_NUMBER", currentPull.number.toString());
     }
