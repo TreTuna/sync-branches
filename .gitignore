@@ -3,6 +3,7 @@ githubContextExample.js
 
 # Editors
 .vscode
+.idea
 
 # Logs
 logs
