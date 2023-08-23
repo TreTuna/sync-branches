@@ -54,6 +54,13 @@ JSON array of GitHub team `slug`s that will be requested to review the PR.
 Example: `'["js-team"]'`
 
 Default: `[]`
+### `PULL_REQUEST_AUTO_MERGE_METHOD`
+
+Set a merge method for auto merging.
+
+Options: `merge`, `squash`, `rebase`
+
+Default: `false`
 
 ## Outputs
 
